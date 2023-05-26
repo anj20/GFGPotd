@@ -1,0 +1,58 @@
+
+// TC:- O(N^2)
+// SC:- O(N^2)
+
+const long long mod=1e9+7;
+class Solution{
+    public:
+    long long binpow(int a,int b)
+    {
+        long long res = 1;
+        while (b > 0)
+        {
+            if (b & 1)res = (res * a);
+            a = (a * a);
+            b = b >> 1;
+        } 
+        return res;
+    }
+    
+    // O(N^2)
+    long long helper(vector<long long>&arr,int index,long long curr,long long target,
+                    vector<vector<long long>>&dp)
+    {
+        if(curr>target)return 0;
+        if(index==arr.size())
+        {
+            return (curr==target);
+        }
+        if(dp[index][curr]!=-1)return dp[index][curr];
+        
+        return dp[index][curr]=(helper(arr,index+1,curr+arr[index],target,dp)%mod+
+                                helper(arr,index+1,curr  ,target,dp)%mod)%mod;
+    }
+    
+    
+    
+    int numOfWays(int n, int x)
+    {
+        vector<long long>ans;
+        
+        // O(Nlog(N))
+        for(int i=1;i<=n;i++)
+        {
+            long long ele=binpow(i,x);
+            if(ele>n)break;
+            ans.push_back(ele);
+        }
+        
+        
+        vector<vector<long long>>dp(ans.size(),vector<long long>(n+1,-1));
+        
+        return helper(ans,0,0,n,dp);
+    
+    }
+    
+    
+    
+};
